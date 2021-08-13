@@ -10,7 +10,16 @@ class TableUserList extends Component {
                     <td>{student.fullName}</td>
                     <td>{student.tel}</td>
                     <td>{student.email}</td>
-
+                    <td>
+                        <button className="btn btn-outline-danger mr-2" onClick={()=>{
+                            const action = {
+                                type: 'REMOVE_STUDENT',
+                                userID: student.userID
+                            }
+                            this.props.dispatch(action);
+                        }}>Xóa</button>
+                        <button className="btn btn-outline-primary">Chỉnh sửa</button>
+                    </td>
                 </tr>
             )
         

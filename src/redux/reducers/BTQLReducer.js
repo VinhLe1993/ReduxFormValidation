@@ -17,6 +17,20 @@ const stateDefault = {
 
 export const BTQLReducer = (state = stateDefault, action) => {
   switch (action.type) {
+    case "ADD_TO_LIST": {
+      state.arrStudent = [...state.arrStudent, action.student];
+
+      return { ...state };
+    }
+    case "REMOVE_STUDENT": {
+      state.arrStudent = [
+        ...state.arrStudent.filter(
+          (student) => student.userID !== action.userID
+        ),
+      ];
+      return {...state};
+    }
+
     default:
       return state;
   }

@@ -21,7 +21,8 @@ class UserProfile extends Component {
   handleChangeInput = (event) => {
     let { name, value } = event.target;
 
-    let newValue = { ...this.state.values, [name]: value };
+    let newValue = { ...this.props.student.values};
+    newValue[name] = value;
 
     let attrValue = "";
     let regex;
@@ -31,7 +32,7 @@ class UserProfile extends Component {
         /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     }
 
-    let newError = { ...this.state.errors };
+    let newError = { ...this.props.student.errors };
     let messageError = "";
     if (value.trim() === "") {
       messageError = name + " is required !";
@@ -46,9 +47,13 @@ class UserProfile extends Component {
     }
 
     newError[name] = messageError;
-    this.setState({
-      values: newValue,
-      errors: newError,
+
+    this.props.dispatch({
+      type: "HANDLE_CHANGE_INPUT",
+      student: {
+        values: newValue,
+        errors: newError,
+      },
     });
   };
 
@@ -80,6 +85,8 @@ class UserProfile extends Component {
   };
 
   render() {
+    let { userID, fullName, tel, email } = this.props.student.values;
+
     return (
       <form className="card mt-5" onSubmit={this.handleSubmit}>
         <div className="card-header bg-dark text-white">Form đăng kí</div>
@@ -89,6 +96,7 @@ class UserProfile extends Component {
               <div className="form-group">
                 <p>Mã SV</p>
                 <input
+                  value={userID}
                   className="form-control"
                   name="userID"
                   onChange={this.handleChangeInput}
@@ -98,7 +106,7 @@ class UserProfile extends Component {
               <div className="form-group">
                 <p>Số Điện Thoại</p>
                 <input
-                  
+                  value={tel}
                   className="form-control"
                   name="tel"
                   onChange={this.handleChangeInput}
@@ -110,6 +118,7 @@ class UserProfile extends Component {
               <div className="form-group">
                 <p>Họ tên</p>
                 <input
+                  value={fullName}
                   className="form-control"
                   name="fullName"
                   onChange={this.handleChangeInput}
@@ -120,6 +129,7 @@ class UserProfile extends Component {
               <div className="form-group">
                 <p>Email</p>
                 <input
+                  value={email}
                   className="form-control"
                   typeEmail="email"
                   name="email"
@@ -133,6 +143,19 @@ class UserProfile extends Component {
             <button className="btn btn-outline-success mr-2" type="submit">
               Thêm sinh viên
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                const action = {
+                  type: "UPDATE_STUDENT",
+                  updateStudent: this.props.student.values,
+                };
+                this.props.dispatch(action);
+              }}
+              className="btn btn-outline-primary"
+            >
+              Cập nhật
+            </button>
           </div>
         </div>
       </form>
@@ -140,4 +163,11 @@ class UserProfile extends Component {
   }
 }
 
-export default connect()(UserProfile);
+const mapStateToProps = (state) => {
+  return {
+    editArrStudent: state.BTQLReducer.editArrStudent,
+    student: state.BTQLReducer.student,
+  };
+};
+
+export default connect(mapStateToProps)(UserProfile);

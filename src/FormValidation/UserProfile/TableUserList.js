@@ -18,7 +18,13 @@ class TableUserList extends Component {
                             }
                             this.props.dispatch(action);
                         }}>Xóa</button>
-                        <button className="btn btn-outline-primary">Chỉnh sửa</button>
+                        <button className="btn btn-outline-primary" onClick={()=>{
+                            const action = {
+                                type: 'EDIT_LIST',
+                                editArrStudent: student
+                            }
+                            this.props.dispatch(action);
+                        }}>Chỉnh sửa</button>
                     </td>
                 </tr>
             )
